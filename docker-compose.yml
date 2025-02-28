@@ -27,6 +27,15 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
+  redis:
+    image: redis:7
+    container_name: jet_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
   backend:
     build: .
     container_name: jet_backend
@@ -34,9 +43,12 @@ services:
     depends_on:
       - db
       - rabbitmq
+      - redis
     environment:
       DATABASE_URL: postgres://user:password@db:5432/messages_db
       RABBITMQ_URL: amqp://user:password@rabbitmq
+      REDIS_URL: redis://redis:6379
+      PORT: 3000
     ports:
       - "3000:3000"
     volumes:
@@ -46,3 +58,4 @@ services:
 volumes:
   postgres_data:
   rabbitmq_data:
+  redis_data:
