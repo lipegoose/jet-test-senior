@@ -55,6 +55,23 @@ services:
       - .:/app
     command: ["npm", "start"]
 
+  consumer:
+    build: .
+    container_name: jet_whatsapp_consumer
+    restart: always
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/messages_db
+      RABBITMQ_URL: amqp://user:password@rabbitmq
+      REDIS_URL: redis://redis:6379
+      PORT: 3000
+    volumes:
+      - .:/app
+    command: ["npm", "run", "consumer"]
+
 volumes:
   postgres_data:
   rabbitmq_data:
