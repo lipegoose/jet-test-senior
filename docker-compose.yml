@@ -37,7 +37,9 @@ services:
       - redis_data:/data
 
   backend:
-    build: .
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: jet_backend
     restart: always
     depends_on:
@@ -52,11 +54,13 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - ./backend:/app
     command: ["npm", "start"]
 
   consumer:
-    build: .
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: jet_whatsapp_consumer
     restart: always
     depends_on:
@@ -69,8 +73,21 @@ services:
       REDIS_URL: redis://redis:6379
       PORT: 3000
     volumes:
-      - .:/app
+      - ./backend:/app
     command: ["npm", "run", "consumer"]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: jet_frontend
+    restart: always
+    ports:
+      - "8080:80"   # Mapeia a porta 80 do container para 8080 no host
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
 
 volumes:
   postgres_data:
