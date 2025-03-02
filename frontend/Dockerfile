@@ -1,13 +1,18 @@
-# Etapa 1: Construção do projeto React
-FROM node:18 as build
+# Dockerfile no diretório frontend/
+FROM node:18
+
+# Define o diretório de trabalho dentro do container
 WORKDIR /app
+
+# Copia os arquivos de dependência e instala as dependências
 COPY package.json package-lock.json ./
 RUN npm install
-COPY . .
-RUN npm run build
 
-# Etapa 2: Servir os arquivos estáticos com Nginx
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Copia todo o código para dentro do container
+COPY . .
+
+# Exponha a porta interna em que o servidor de desenvolvimento roda (normalmente 3000)
+EXPOSE 3000
+
+# Inicia o servidor de desenvolvimento com hot reload
+CMD ["npm", "start"]
