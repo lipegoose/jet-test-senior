@@ -12,6 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Capture todas as requisições
+// @ts-ignore
 app.use(Sentry.Handlers.requestHandler());
 
 // Middleware para interpretar JSON
@@ -26,6 +27,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Capture erros no final
+// @ts-ignore
 app.use(Sentry.Handlers.errorHandler());
 
 // Inicializa a conexão com o RabbitMQ antes de iniciar o servidor
