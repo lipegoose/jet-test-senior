@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@sentry/cli": "^2.42.2",
+    "@sentry/node": "^9.3.0",
     "@whiskeysockets/baileys": "^6.7.13",
     "amqplib": "^0.10.5",
     "bull": "^4.16.5",
